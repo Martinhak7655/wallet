@@ -86,6 +86,8 @@ def cashin(sum, id_input):
     return True
 
 def cashout(sum, id_input):
+    if sum <= 100 or sum >= user_balance[0]:
+        return False
     update = '''
             UPDATE users SET balance = (%s) WHERE id = (%s);
         '''
@@ -99,6 +101,65 @@ def poxancum(sum, id_input):
         '''
     cursor.execute(update, (user_balance[0] + sum, id_input,))
     connection.commit()
+
+def delete(mail, id, verify):
+    if verify == "":
+        return False
+    msg = MIMEMultipart()
+    msg["From"] = "martinhakobyan2024@mail.ru"
+    msg["To"] = mail
+    msg["Subject"] = "Hastateq dzer account i jnjman verifikacumy"
+    msg.attach(MIMEText(f"Dzer Verifikacman kody` {random_num}", 'plain'))
+    server = smtplib.SMTP_SSL("smtp.mail.ru", 465)
+    server.login("martinhakobyan2024@mail.ru", "qtuHVFSGgXNRyg1676Ja")
+    server.sendmail("martinhakobyan2024@mail.ru", mail, msg.as_string())
+    if verify == random_num:
+        delete = '''
+            DELETE FROM users WHERE id = (%s);
+        '''
+        cursor.execute(delete, (id,))
+        connection.commit()
+        return True
+
+def quests2(quest3=None, quest4=None, quest5=None):
+    if quest3 == "Anun":
+        return True
+    elif quest4 == "Mail":
+        return True
+    elif quest5 == "Password":
+        return True
+    else:
+        return False
+
+def anvanpopoxum(anun, id):
+    if anun == "" or id == "":
+        return False
+    update = '''
+        UPDATE users SET username = (%s) WHERE id = (%s);
+    '''
+    cursor.execute(update, (anun, id,))
+    connection.commit()
+    return True
+
+def mailpopoxum(mail, id):
+    if mail == "" or id == "":
+        return False
+    update = '''
+        UPDATE users SET mail = (%s) WHERE id = (%s);
+    '''
+    cursor.execute(update, (mail, id,))
+    connection.commit()
+    return True
+
+def passwordpopoxum(password, id):
+    if password == "" or id == "":
+        return False
+    update = '''
+        UPDATE users SET password = (%s) WHERE id = (%s);
+    '''
+    cursor.execute(update, (password, id,))
+    connection.commit()
+    return True
 
 while True:
     quest = input("Grancvel te Mutq gorcel:  ")
@@ -114,6 +175,8 @@ while True:
                 print("Cashin command: +")
                 print("Cashout command: -")
                 print("Poxancum: P")
+                print("Popoxum: R")
+                print("Delete account: D")
                 print("Exit: E")
                 print("-" * 25)
                 while True:
@@ -142,6 +205,29 @@ while True:
                     elif command == "E":
                         print("Exit succes")
                         break
+                    elif command == "D":
+                        Mail = input("Greq dzer maily:  ")
+                        id_input1 = input("Greq dzer idn:  ")
+                        verify_input = int(input("Verifikacman kody:  "))
+                        if delete(mail=Mail, id=id_input1, verify=verify_input):
+                            print("Succes Procces")
+                    elif command == "R":
+                        harc = input("Uzumeq popoxel anun, mail, te password")
+                        if quests2(quest3=harc):
+                            anun_input = input("Greq popoxman entaka anuny")
+                            id_input1 = input("Greq idn")
+                            if anvanpopoxum(anun=anun_input, id=id_input1):
+                                print("Succes Procces")
+                        elif quests2(quest4=harc):
+                            mail_input = input("Greq popoxman entaka anuny")
+                            id_input1 = input("Greq idn")
+                            if mailpopoxum(mail=mail_input, id=id_input1):
+                                print("Succes Procces")
+                        elif quests2(quest5=harc):
+                            password_input = input("Greq popoxman entaka anuny")
+                            id_input1 = input("Greq idn")
+                            if passwordpopoxum(password=password_input, id=id_input1):
+                                print("Succes Procces")
             else:
                 print("*" * 25)
                 print("Gorcuxutyunnery datark en!!")
@@ -156,6 +242,8 @@ while True:
             print("Cashin command: +")
             print("Cashout command: -")
             print("Poxancum: P")
+            print("Popoxum: R")
+            print("Delete account: D")
             print("Exit: E")
             print("-" * 25)
             while True:
@@ -184,6 +272,29 @@ while True:
                 elif command == "E":
                     print("Exit succes")
                     break
+                elif command == "D":
+                    Mail = input("Greq dzer maily:  ")
+                    id_input1 = input("Greq dzer idn:  ")
+                    verify_input = int(input("Verifikacman kody:  "))
+                    if delete(mail=Mail, id=id_input1, verify=verify_input):
+                        print("Succes Procces")
+                elif command == "R":
+                    harc = input("Uzumeq popoxel anun, mail, te password")
+                    if quests2(quest3=harc):
+                        user_input = input("Greq popoxman entaka anuny")
+                        id_input2 = input("Greq idn")
+                        if anvanpopoxum(anun=user_input, id=id_input2):
+                            print("Succes Procces")
+                    elif quests2(quest4=harc):
+                        mail_input = input("Greq popoxman entaka anuny")
+                        id_input1 = input("Greq idn")
+                        if mailpopoxum(mail=mail_input, id=id_input1):
+                            print("Succes Procces")
+                    elif quests2(quest5=harc):
+                        password_input = input("Greq popoxman entaka anuny")
+                        id_input1 = input("Greq idn")
+                        if passwordpopoxum(password=password_input, id=id_input1):
+                            print("Succes Procces")
         else:
             print("*" * 25)
             print("Gorcuxutyunnery datark en!!")
