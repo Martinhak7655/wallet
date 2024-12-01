@@ -20,7 +20,7 @@ create_table = '''
         username VARCHAR(100) NOT NULL,
         mail VARCHAR(100) NOT NULL,
         password VARCHAR(100) NOT NULL,
-        balance VARCHAR(100) NOT NULL,
+        balance INTEGER DEFAULT 0,
         create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 '''
@@ -74,14 +74,16 @@ def getbalance(id_input):
     cursor.execute(select, (id_input,))
     connection.commit()
     users = cursor.fetchone()
-    print(f"Dzer balancy {users[4]} dram")
+    print(f"{users[4]} dram")
+    if users:
+        return users[4]
     return True
 
 def cashin(sum, id_input):
     update = '''
         UPDATE users SET balance = (%s) WHERE id = (%s);
     '''
-    cursor.execute(update, (user_balance[0] + sum, id_input,))
+    cursor.execute(update, (getbalance(id_input) + sum, id_input,))
     connection.commit()
     return True
 
@@ -91,7 +93,7 @@ def cashout(sum, id_input):
     update = '''
             UPDATE users SET balance = (%s) WHERE id = (%s);
         '''
-    cursor.execute(update, (user_balance[0] - sum, id_input,))
+    cursor.execute(update, (getbalance(id_input) - sum, id_input,))
     connection.commit()
     return True
 
@@ -99,7 +101,7 @@ def poxancum(sum, id_input):
     update = '''
             UPDATE users SET balance = (%s) WHERE id = (%s);
         '''
-    cursor.execute(update, (user_balance[0] + sum, id_input,))
+    cursor.execute(update, (getbalance(id_input) + sum, id_input,))
     connection.commit()
 
 def delete(mail, id, verify):
@@ -184,7 +186,7 @@ while True:
                     if command == "B":
                         id_input1 = input("Greq dzer idn")
                         if getbalance(id_input=id_input1):
-                            print("procces succesed")
+                            print(f"procces succesed ")
                         else:
                             print("Sxale")
                     elif command == "+":
